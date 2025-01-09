@@ -7,29 +7,25 @@ const placesList = document.querySelector('.places__list');
 // @todo: Функция создания карточки
 const createCard = (obj, funcRemove) => {
   // 1. Получение данных из DOM
-  const cardTitle = cardTemplate.content.querySelector('.card__title');
-  const cardImage = cardTemplate.content.querySelector('.card__image');
+  const card = cardTemplate.content.cloneNode(true);
+  const cardTitle = card.querySelector('.card__title');
+  const cardImage = card.querySelector('.card__image');
+  const removeBtn = card.querySelector('.card__delete-button');
+  const removeItem = card.querySelector('.places__item');
 
   // 2.Наполнение карточки данными
   cardTitle.textContent = obj.name;
   cardImage.src = obj.link;
   cardImage.alt = `Изображение: ${obj.name}`;
 
-  // 3. Создание карточки с функцией удаления
-  const card = cardTemplate.content.cloneNode(true);
-  funcRemove(card);
+  // 3. Обработчик удаления и return
+  removeBtn.addEventListener('click', () => funcRemove(removeItem));
   return card;
 };
 
 // @todo: Функция удаления карточки
-
 const deleteCard = (card) => {
-  // 1. Получение данных из DOM
-  const removeBtn = card.querySelector('.card__delete-button');
-  const removeItem = card.querySelector('.places__item');
-
-  // 2. Обработчик события
-  removeBtn.addEventListener('click', () => removeItem.remove());
+  return card.remove();
 };
 
 // @todo: Вывести карточки на страницу
