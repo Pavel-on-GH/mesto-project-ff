@@ -1,6 +1,44 @@
 import { initialCards } from './scripts/cards';
-
 import './pages/index.css';
+
+//Кнопки
+const profileAddBtn = document.querySelector('.profile__add-button');
+const profileEditBtn = document.querySelector('.profile__edit-button');
+const popupCloseBtn = document.querySelectorAll('.popup__close');
+// Поправить хард-код, когда будет время
+
+// Popap
+const popupTypeEdit = document.querySelector('.popup_type_edit');
+const popupTypeNewCard = document.querySelector('.popup_type_new-card');
+
+profileEditBtn.addEventListener('click', () => {
+  popupTypeEdit.classList.add('popup_is-opened');
+});
+
+profileAddBtn.addEventListener('click', () => {
+  popupTypeNewCard.classList.add('popup_is-opened');
+});
+
+popupCloseBtn[0].addEventListener('click', () => {
+  popupTypeEdit.classList.remove('popup_is-opened');
+});
+popupCloseBtn[1].addEventListener('click', () => {
+  popupTypeNewCard.classList.remove('popup_is-opened');
+});
+// Поправить хард-код, когда будет время
+
+// *** *** *** ***
+// *** *** *** ***
+// Редактирование профиля
+
+const profileTitle = document.querySelector('.profile__title');
+const profileDescription = document.querySelector('.profile__description');
+console.log(profileTitle.innerHTML);
+// Повесить отслеживание на value в popap и изменять innerHTML в соответствии с этим
+// Не забыть отменить перезагрузку страницы при сохранении
+
+// *** *** *** ***
+// *** *** *** ***
 
 // @todo: Темплейт карточки
 const cardTemplate = document.querySelector('#card-template');
