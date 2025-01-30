@@ -4,28 +4,26 @@ import './pages/index.css';
 //Кнопки
 const profileAddBtn = document.querySelector('.profile__add-button');
 const profileEditBtn = document.querySelector('.profile__edit-button');
-const popupCloseBtn = document.querySelectorAll('.popup__close');
-// Поправить хард-код, когда будет время
 
 // Popap
-const popupTypeEdit = document.querySelector('.popup_type_edit');
-const popupTypeNewCard = document.querySelector('.popup_type_new-card');
+const popupEdit = document.querySelector('.popup_type_edit');
+const popupNewCard = document.querySelector('.popup_type_new-card');
 
+// Открыть popap
 profileEditBtn.addEventListener('click', () => {
-  popupTypeEdit.classList.add('popup_is-opened');
+  popupEdit.classList.add('popup_is-opened');
 });
-
 profileAddBtn.addEventListener('click', () => {
-  popupTypeNewCard.classList.add('popup_is-opened');
+  popupNewCard.classList.add('popup_is-opened');
 });
 
-popupCloseBtn[0].addEventListener('click', () => {
-  popupTypeEdit.classList.remove('popup_is-opened');
+// Закрыть popap
+popupEdit.querySelector('.popup__close').addEventListener('click', () => {
+  popupEdit.classList.remove('popup_is-opened');
 });
-popupCloseBtn[1].addEventListener('click', () => {
-  popupTypeNewCard.classList.remove('popup_is-opened');
+popupNewCard.querySelector('.popup__close').addEventListener('click', () => {
+  popupNewCard.classList.remove('popup_is-opened');
 });
-// Поправить хард-код, когда будет время
 
 // *** *** *** ***
 // *** *** *** ***
@@ -37,7 +35,7 @@ const profileDesc = document.querySelector('.profile__description');
 // Инпуты в popap
 const popupInputName = document.querySelector('.popup__input_type_name');
 const popupInputDesc = document.querySelector('.popup__input_type_description');
-const popapProfileSaveBtn = popupTypeEdit.querySelector('.popup__button');
+const popapProfileSaveBtn = popupEdit.querySelector('.popup__button');
 
 // Отображение данных из профиля в инпут
 popupInputName.value = profileTitle.innerHTML;
@@ -49,7 +47,7 @@ popapProfileSaveBtn.addEventListener('click', (e) => {
   profileTitle.innerHTML = popupInputName.value;
   profileDesc.innerHTML = popupInputDesc.value;
   // Закрыть popap
-  popupTypeEdit.classList.remove('popup_is-opened');
+  popupEdit.classList.remove('popup_is-opened');
 });
 
 //
