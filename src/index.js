@@ -31,14 +31,25 @@ popupCloseBtn[1].addEventListener('click', () => {
 // *** *** *** ***
 // Редактирование профиля
 
+// Данные профиля
 const profileTitle = document.querySelector('.profile__title');
-const profileDescription = document.querySelector('.profile__description');
-console.log(profileTitle.innerHTML);
+const profileDesc = document.querySelector('.profile__description');
+// Инпуты в popap
+const popupInputName = document.querySelector('.popup__input_type_name');
+const popupInputDesc = document.querySelector('.popup__input_type_description');
+// Редактирование данных профиля
+popupInputName.addEventListener('input', (e) => (profileTitle.innerHTML = e.target.value));
+popupInputDesc.addEventListener('input', (e) => (profileDesc.innerHTML = e.target.value));
+
 // Повесить отслеживание на value в popap и изменять innerHTML в соответствии с этим
 // Не забыть отменить перезагрузку страницы при сохранении
 
 // *** *** *** ***
 // *** *** *** ***
+
+//
+
+//
 
 // @todo: Темплейт карточки
 const cardTemplate = document.querySelector('#card-template');
@@ -54,6 +65,13 @@ const createCard = (obj, funcRemove) => {
   const cardImage = card.querySelector('.card__image');
   const removeBtn = card.querySelector('.card__delete-button');
   const removeItem = card.querySelector('.places__item');
+  const LikeBtn = card.querySelector('.card__like-button');
+
+  // 1.5 Лайк
+  // вынести в отдельную функцию
+  const funcLike = () => LikeBtn.classList.toggle('card__like-button_is-active');
+
+  LikeBtn.addEventListener('click', funcLike);
 
   // 2.Наполнение карточки данными
   cardTitle.textContent = obj.name;
@@ -69,6 +87,9 @@ const createCard = (obj, funcRemove) => {
 const deleteCard = (card) => {
   return card.remove();
 };
+
+// Лайк
+// const cardLikeBtn = document.querySelector('.card__like-button');
 
 // @todo: Вывести карточки на страницу
 initialCards.map((obj) => {
