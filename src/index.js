@@ -29,7 +29,7 @@ popupCloseBtn[1].addEventListener('click', () => {
 
 // *** *** *** ***
 // *** *** *** ***
-// Редактирование профиля
+// @@@ Редактирование профиля
 
 // Данные профиля
 const profileTitle = document.querySelector('.profile__title');
@@ -37,18 +37,22 @@ const profileDesc = document.querySelector('.profile__description');
 // Инпуты в popap
 const popupInputName = document.querySelector('.popup__input_type_name');
 const popupInputDesc = document.querySelector('.popup__input_type_description');
-// Редактирование данных профиля
-popupInputName.addEventListener('input', (e) => (profileTitle.innerHTML = e.target.value));
-popupInputDesc.addEventListener('input', (e) => (profileDesc.innerHTML = e.target.value));
+const popapProfileSaveBtn = popupTypeEdit.querySelector('.popup__button');
 
-// Повесить отслеживание на value в popap и изменять innerHTML в соответствии с этим
-// Не забыть отменить перезагрузку страницы при сохранении
+// Отображение данных из профиля в инпут
+popupInputName.value = profileTitle.innerHTML;
+popupInputDesc.value = profileDesc.innerHTML;
 
-// *** *** *** ***
-// *** *** *** ***
+popapProfileSaveBtn.addEventListener('click', (e) => {
+  e.preventDefault();
+  // Редактировать данные профиля
+  profileTitle.innerHTML = popupInputName.value;
+  profileDesc.innerHTML = popupInputDesc.value;
+  // Закрыть popap
+  popupTypeEdit.classList.remove('popup_is-opened');
+});
 
 //
-
 //
 
 // @todo: Темплейт карточки
