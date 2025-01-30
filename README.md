@@ -4,5 +4,5 @@ https://github.com/Pavel-on-GH/mesto-project-ff
 
 # Запуск
 
-npm i
-npm run dev
+- npm i
+- npm run dev
