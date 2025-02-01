@@ -13,14 +13,15 @@ const popupImg = document.querySelector('.popup__image');
 
 // Открыть popup
 profileEditBtn.addEventListener('click', () => {
-  popupEdit.classList.add('popup_is-opened');
+  openPopup(popupEdit);
 });
 profileAddBtn.addEventListener('click', () => {
-  popupNewCard.classList.add('popup_is-opened');
+  openPopup(popupNewCard);
 });
 
 // Закрыть popup
 
+const openPopup = (el) => el.classList.add('popup_is-opened');
 const closePopup = (el) => el.classList.remove('popup_is-opened');
 
 popupEdit.querySelector('.popup__close').addEventListener('click', () => {
@@ -88,8 +89,8 @@ const createCard = (obj, funcRemove, funcLike) => {
 
   // 3.5 Открытие картинки - вынести функционал во вне функции
   cardImage.addEventListener('click', () => {
-    popupImageCard.classList.add('popup_is-opened');
     popupImg.src = obj.link;
+    openPopup(popupImageCard);
   });
 
   // 4. Обработчик удаления и return
