@@ -18,11 +18,14 @@ profileAddBtn.addEventListener('click', () => {
 });
 
 // Закрыть popap
+
+const closePopap = (el) => el.classList.remove('popup_is-opened');
+
 popupEdit.querySelector('.popup__close').addEventListener('click', () => {
-  popupEdit.classList.remove('popup_is-opened');
+  closePopap(popupEdit);
 });
 popupNewCard.querySelector('.popup__close').addEventListener('click', () => {
-  popupNewCard.classList.remove('popup_is-opened');
+  closePopap(popupNewCard);
 });
 
 // *** *** *** ***
@@ -41,13 +44,14 @@ const popapProfileSaveBtn = popupEdit.querySelector('.popup__button');
 popupInputName.value = profileTitle.innerHTML;
 popupInputDesc.value = profileDesc.innerHTML;
 
+// Изменение профиля
 popapProfileSaveBtn.addEventListener('click', (e) => {
   e.preventDefault();
   // Редактировать данные профиля
   profileTitle.innerHTML = popupInputName.value;
   profileDesc.innerHTML = popupInputDesc.value;
   // Закрыть popap
-  popupEdit.classList.remove('popup_is-opened');
+  closePopap(popupEdit);
 });
 
 //
@@ -60,27 +64,24 @@ const cardTemplate = document.querySelector('#card-template');
 const placesList = document.querySelector('.places__list');
 
 // @todo: Функция создания карточки
-const createCard = (obj, funcRemove) => {
+const createCard = (obj, funcRemove, funcLike) => {
   // 1. Получение данных из DOM
   const card = cardTemplate.content.cloneNode(true);
   const cardTitle = card.querySelector('.card__title');
   const cardImage = card.querySelector('.card__image');
   const removeBtn = card.querySelector('.card__delete-button');
   const removeItem = card.querySelector('.places__item');
-  const LikeBtn = card.querySelector('.card__like-button');
+  const likeBtn = card.querySelector('.card__like-button');
 
-  // 1.5 Лайк
-  // вынести в отдельную функцию
-  const funcLike = () => LikeBtn.classList.toggle('card__like-button_is-active');
-
-  LikeBtn.addEventListener('click', funcLike);
-
-  // 2.Наполнение карточки данными
+  // 2. Наполнение карточки данными
   cardTitle.textContent = obj.name;
   cardImage.src = obj.link;
   cardImage.alt = `Изображение: ${obj.name}`;
 
-  // 3. Обработчик удаления и return
+  // 3. Поставить / убрать лайк
+  likeBtn.addEventListener('click', () => funcLike(likeBtn));
+
+  // 4. Обработчик удаления и return
   removeBtn.addEventListener('click', () => funcRemove(removeItem));
   return card;
 };
@@ -91,10 +92,37 @@ const deleteCard = (card) => {
 };
 
 // Лайк
-// const cardLikeBtn = document.querySelector('.card__like-button');
+//
+const funcLike = function (el) {
+  el.classList.toggle('card__like-button_is-active');
+};
 
 // @todo: Вывести карточки на страницу
 initialCards.map((obj) => {
-  const card = createCard(obj, deleteCard);
+  const card = createCard(obj, deleteCard, funcLike);
   placesList.append(card);
 });
+
+const popapAddSaveBtn = popupNewCard.querySelector('.popup__button');
+const inputNewName = popupNewCard.querySelector('.popup__input_type_card-name');
+const inputNewUrl = popupNewCard.querySelector('.popup__input_type_url');
+
+// Функционал - добавление новой карточки
+const addCard = (e) => {
+  e.preventDefault();
+  // Данные новой карточки
+  const newObj = {
+    name: inputNewName.value,
+    link: inputNewUrl.value,
+  };
+  // Добавить новую карточку
+  const card = createCard(newObj, deleteCard, funcLike);
+  placesList.prepend(card);
+  // Очистка формы
+  inputNewName.value = '';
+  inputNewUrl.value = '';
+
+  closePopap(popupNewCard);
+};
+
+popapAddSaveBtn.addEventListener('click', addCard);
