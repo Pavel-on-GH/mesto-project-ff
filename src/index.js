@@ -21,7 +21,10 @@ profileAddBtn.addEventListener('click', () => {
 
 // Закрыть popup
 
-const openPopup = (el) => el.classList.add('popup_is-opened');
+const openPopup = (el) => {
+  el.classList.add('popup_is-animated');
+  el.classList.add('popup_is-opened');
+};
 const closePopup = (el) => el.classList.remove('popup_is-opened');
 
 popupEdit.querySelector('.popup__close').addEventListener('click', () => {
@@ -44,14 +47,13 @@ const profileDesc = document.querySelector('.profile__description');
 // Инпуты в popup
 const popupInputName = document.querySelector('.popup__input_type_name');
 const popupInputDesc = document.querySelector('.popup__input_type_description');
-const popupProfileSaveBtn = popupEdit.querySelector('.popup__button');
 
 // Отображение данных из профиля в инпут
 popupInputName.value = profileTitle.innerHTML;
 popupInputDesc.value = profileDesc.innerHTML;
 
 // Изменение профиля
-popupProfileSaveBtn.addEventListener('click', (e) => {
+popupEdit.addEventListener('submit', (e) => {
   e.preventDefault();
   // Редактировать данные профиля
   profileTitle.innerHTML = popupInputName.value;
@@ -115,7 +117,6 @@ initialCards.map((obj) => {
   placesList.append(card);
 });
 
-const popupAddSaveBtn = popupNewCard.querySelector('.popup__button');
 const inputNewName = popupNewCard.querySelector('.popup__input_type_card-name');
 const inputNewUrl = popupNewCard.querySelector('.popup__input_type_url');
 
@@ -137,4 +138,4 @@ const addCard = (e) => {
   closePopup(popupNewCard);
 };
 
-popupAddSaveBtn.addEventListener('click', addCard);
+popupNewCard.addEventListener('submit', addCard);
