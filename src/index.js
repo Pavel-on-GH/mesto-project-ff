@@ -139,3 +139,23 @@ const addCard = (e) => {
 };
 
 popupNewCard.addEventListener('submit', addCard);
+
+const closeAllPopup = () => {
+  closePopup(popupEdit);
+  closePopup(popupNewCard);
+  closePopup(popupImageCard);
+};
+
+// Закрытие через esc
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeAllPopup();
+  }
+});
+
+// Закрыть через нажатие на overlay
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('popup_is-opened')) {
+    closeAllPopup();
+  }
+});
