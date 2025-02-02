@@ -72,7 +72,7 @@ const cardTemplate = document.querySelector('#card-template');
 const placesList = document.querySelector('.places__list');
 
 // @todo: Функция создания карточки
-const createCard = (obj, funcRemove, funcLike) => {
+const createCard = (obj, funcRemove, funcLike, funcImgClick) => {
   // 1. Получение данных из DOM
   const card = cardTemplate.content.cloneNode(true);
   const cardTitle = card.querySelector('.card__title');
@@ -89,13 +89,10 @@ const createCard = (obj, funcRemove, funcLike) => {
   // 3. Поставить / убрать лайк
   likeBtn.addEventListener('click', () => funcLike(likeBtn));
 
-  // 3.5 Открытие картинки - вынести функционал во вне функции
-  cardImage.addEventListener('click', () => {
-    popupImg.src = obj.link;
-    openPopup(popupImageCard);
-  });
+  // 4. Открытие картинки - вынести функционал во вне функции
+  cardImage.addEventListener('click', () => funcImgClick(obj));
 
-  // 4. Обработчик удаления и return
+  // 5. Обработчик удаления и return
   removeBtn.addEventListener('click', () => funcRemove(removeItem));
   return card;
 };
@@ -111,9 +108,14 @@ const funcLike = function (el) {
   el.classList.toggle('card__like-button_is-active');
 };
 
+const imgClick = (obj) => {
+  popupImg.src = obj.link;
+  openPopup(popupImageCard);
+};
+
 // @todo: Вывести карточки на страницу
 initialCards.map((obj) => {
-  const card = createCard(obj, deleteCard, funcLike);
+  const card = createCard(obj, deleteCard, funcLike, imgClick);
   placesList.append(card);
 });
 
@@ -128,8 +130,9 @@ const addCard = (e) => {
     name: inputNewName.value,
     link: inputNewUrl.value,
   };
+
   // Добавить новую карточку
-  const card = createCard(newObj, deleteCard, funcLike);
+  const card = createCard(newObj, deleteCard, funcLike, imgClick);
   placesList.prepend(card);
   // Очистка формы
   inputNewName.value = '';
