@@ -1,15 +1,73 @@
 import { initialCards } from './scripts/cards';
 import { deleteCard, funcLike, createCard } from './components/card';
-import { openPopup, closePopup, popupImageCard, popupEdit, popupNewCard } from './components/modal';
+import { openPopup, closePopup } from './components/modal';
 import './pages/index.css';
 
 // @@@ Глобальная переменные и DOM узлы
-export const cardTemplate = document.querySelector('#card-template');
-export const placesList = document.querySelector('.places__list');
-export const popupImg = document.querySelector('.popup__image');
-export const popupCaption = document.querySelector('.popup__caption');
-export const inputNewName = popupNewCard.querySelector('.popup__input_type_card-name');
-export const inputNewUrl = popupNewCard.querySelector('.popup__input_type_url');
+const placesList = document.querySelector('.places__list');
+const popupImg = document.querySelector('.popup__image');
+const popupCaption = document.querySelector('.popup__caption');
+// @Кнопки
+const profileAddBtn = document.querySelector('.profile__add-button');
+const profileEditBtn = document.querySelector('.profile__edit-button');
+// @Popups
+const popupEdit = document.querySelector('.popup_type_edit');
+const popupNewCard = document.querySelector('.popup_type_new-card');
+const popupImageCard = document.querySelector('.popup_type_image');
+
+// ** ** ** СДЕЛАТЬ РЕФАКТОРИНГ
+// ** ** **
+// ** ** **
+// @@@ Функционал - работа с конкретными popups
+
+//@@@ Функционал - откытие popup
+profileEditBtn.addEventListener('click', () => {
+  clearInputProfile();
+  openPopup(popupEdit);
+});
+profileAddBtn.addEventListener('click', () => {
+  openPopup(popupNewCard);
+});
+
+// Закрыть popup
+popupEdit.querySelector('.popup__close').addEventListener('click', () => {
+  closePopup(popupEdit);
+});
+popupNewCard.querySelector('.popup__close').addEventListener('click', () => {
+  closePopup(popupNewCard);
+  inputNewName.value = '';
+  inputNewUrl.value = '';
+  // переделать в submit и сбросить через reset
+});
+popupImageCard.querySelector('.popup__close').addEventListener('click', () => {
+  closePopup(popupImageCard);
+});
+
+// Закрыть все popups
+const closeAllPopup = () => {
+  closePopup(popupEdit);
+  closePopup(popupNewCard);
+  closePopup(popupImageCard);
+};
+// Закрытие через esc
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeAllPopup();
+  }
+});
+// Закрыть через нажатие на overlay
+document.addEventListener('click', (e) => {
+  if (e.target.classList.contains('popup_is-opened')) {
+    closeAllPopup();
+  }
+});
+
+// ** ** ** СДЕЛАТЬ РЕФАКТОРИНГ
+// ** ** **
+// ** ** **
+
+const inputNewName = popupNewCard.querySelector('.popup__input_type_card-name');
+const inputNewUrl = popupNewCard.querySelector('.popup__input_type_url');
 
 // @@@ Редактирование профиля
 
@@ -22,7 +80,7 @@ const popupInputName = document.querySelector('.popup__input_type_name');
 const popupInputDesc = document.querySelector('.popup__input_type_description');
 
 // Отображение данных из профиля в инпут
-export const clearInputProfile = () => {
+const clearInputProfile = () => {
   popupInputName.value = profileTitle.textContent;
   popupInputDesc.value = profileDesc.textContent;
 };
@@ -38,7 +96,7 @@ popupEdit.addEventListener('submit', (e) => {
 });
 
 //@ Функция клика
-export const clickImg = (obj) => {
+const clickImg = (obj) => {
   popupImg.src = obj.link;
   popupCaption.textContent = obj.name;
   popupImg.alt = `Изображение: ${obj.name}`;
@@ -52,7 +110,7 @@ initialCards.map((obj) => {
 });
 
 // @@@ Функционал - добавление новой карточки
-export const addCard = (e) => {
+const addCard = (e) => {
   e.preventDefault();
 
   // 1. Данные новой карточки

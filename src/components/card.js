@@ -1,4 +1,4 @@
-import { cardTemplate } from './../index.js';
+const cardTemplate = document.querySelector('#card-template');
 
 // @ Функция удаления карточки
 export const deleteCard = (card) => {
