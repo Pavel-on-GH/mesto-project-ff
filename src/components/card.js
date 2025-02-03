@@ -1,5 +1,4 @@
-import { inputNewUrl, cardTemplate, placesList, clickImg, inputNewName } from './../index.js';
-import { closePopup, popupNewCard } from './modal.js';
+import { cardTemplate } from './../index.js';
 
 // @ Функция удаления карточки
 export const deleteCard = (card) => {
@@ -35,25 +34,4 @@ export const createCard = (obj, funcRemove, funcLike, funcImgClick) => {
   // 5. Обработчик удаления и return
   removeBtn.addEventListener('click', () => funcRemove(removeItem));
   return card;
-};
-
-// @@@ Функционал - добавление новой карточки
-export const addCard = (e) => {
-  e.preventDefault();
-
-  // 1. Данные новой карточки
-  const newObj = {
-    name: inputNewName.value,
-    link: inputNewUrl.value,
-  };
-
-  // 2. Добавить новую карточку
-  const card = createCard(newObj, deleteCard, funcLike, clickImg);
-  placesList.prepend(card);
-
-  // 3. Очистка формы
-  inputNewName.value = '';
-  inputNewUrl.value = '';
-
-  closePopup(popupNewCard);
 };

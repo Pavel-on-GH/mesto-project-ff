@@ -1,5 +1,5 @@
 import { initialCards } from './scripts/cards';
-import { deleteCard, funcLike, addCard, createCard } from './components/card';
+import { deleteCard, funcLike, createCard } from './components/card';
 import { openPopup, closePopup, popupImageCard, popupEdit, popupNewCard } from './components/modal';
 import './pages/index.css';
 
@@ -50,6 +50,26 @@ initialCards.map((obj) => {
   const card = createCard(obj, deleteCard, funcLike, clickImg);
   placesList.append(card);
 });
+
+// @@@ Функционал - добавление новой карточки
+export const addCard = (e) => {
+  e.preventDefault();
+
+  // 1. Данные новой карточки
+  const newObj = {
+    name: inputNewName.value,
+    link: inputNewUrl.value,
+  };
+
+  // 2. Добавить новую карточку
+  const card = createCard(newObj, deleteCard, funcLike, clickImg);
+  placesList.prepend(card);
+
+  // 3. Очистка и закрытие формы
+  e.target.reset();
+
+  closePopup(popupNewCard);
+};
 
 // @@@ Добавление новой карточки
 popupNewCard.addEventListener('submit', addCard);
