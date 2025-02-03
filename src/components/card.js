@@ -1,5 +1,5 @@
-import { popupImg, inputNewUrl, cardTemplate, placesList, inputNewName } from './../index.js';
-import { openPopup, closePopup, popupImageCard, popupNewCard } from './modal.js';
+import { inputNewUrl, cardTemplate, placesList, clickImg, inputNewName } from './../index.js';
+import { closePopup, popupNewCard } from './modal.js';
 
 // @ Функция удаления карточки
 export const deleteCard = (card) => {
@@ -9,12 +9,6 @@ export const deleteCard = (card) => {
 // @ Функция лайка
 export const funcLike = function (el) {
   el.classList.toggle('card__like-button_is-active');
-};
-
-// Функция клика
-export const imgClick = (obj) => {
-  popupImg.src = obj.link;
-  openPopup(popupImageCard);
 };
 
 // @@@ Функционал - создание карточки
@@ -54,7 +48,7 @@ export const addCard = (e) => {
   };
 
   // 2. Добавить новую карточку
-  const card = createCard(newObj, deleteCard, funcLike, imgClick);
+  const card = createCard(newObj, deleteCard, funcLike, clickImg);
   placesList.prepend(card);
 
   // 3. Очистка формы

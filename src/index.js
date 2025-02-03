@@ -1,12 +1,13 @@
 import { initialCards } from './scripts/cards';
-import { deleteCard, funcLike, imgClick, addCard, createCard } from './components/card';
-import { closePopup, popupEdit, popupNewCard } from './components/modal';
+import { deleteCard, funcLike, addCard, createCard } from './components/card';
+import { openPopup, closePopup, popupImageCard, popupEdit, popupNewCard } from './components/modal';
 import './pages/index.css';
 
 // @@@ Глобальная переменные и DOM узлы
 export const cardTemplate = document.querySelector('#card-template');
 export const placesList = document.querySelector('.places__list');
 export const popupImg = document.querySelector('.popup__image');
+export const popupCaption = document.querySelector('.popup__caption');
 export const inputNewName = popupNewCard.querySelector('.popup__input_type_card-name');
 export const inputNewUrl = popupNewCard.querySelector('.popup__input_type_url');
 
@@ -22,23 +23,31 @@ const popupInputDesc = document.querySelector('.popup__input_type_description');
 
 // Отображение данных из профиля в инпут
 export const clearInputProfile = () => {
-  popupInputName.value = profileTitle.innerHTML;
-  popupInputDesc.value = profileDesc.innerHTML;
+  popupInputName.value = profileTitle.textContent;
+  popupInputDesc.value = profileDesc.textContent;
 };
 
 // @@@ Изменение профиля
 popupEdit.addEventListener('submit', (e) => {
   e.preventDefault();
   // Редактировать данные профиля
-  profileTitle.innerHTML = popupInputName.value;
-  profileDesc.innerHTML = popupInputDesc.value;
+  profileTitle.textContent = popupInputName.value;
+  profileDesc.textContent = popupInputDesc.value;
   // Закрыть popup
   closePopup(popupEdit);
 });
 
+//@ Функция клика
+export const clickImg = (obj) => {
+  popupImg.src = obj.link;
+  popupCaption.textContent = obj.name;
+  popupImg.alt = `Изображение: ${obj.name}`;
+  openPopup(popupImageCard);
+};
+
 // @@@ Вывод массива карточек на страницу
 initialCards.map((obj) => {
-  const card = createCard(obj, deleteCard, funcLike, imgClick);
+  const card = createCard(obj, deleteCard, funcLike, clickImg);
   placesList.append(card);
 });
 
