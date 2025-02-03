@@ -1,9 +1,9 @@
 import { initialCards } from './scripts/cards';
-import { deleteCard, funcLike, createCard } from './components/card';
+import { deleteCard, putLikeFunc, createCard } from './components/card';
 import { openPopup, closePopup } from './components/modal';
 import './pages/index.css';
 
-// @@@ Глобальная переменные и DOM узлы
+// @@@ Глобальные переменные и DOM узлы
 const placesList = document.querySelector('.places__list');
 const popupImg = document.querySelector('.popup__image');
 const popupCaption = document.querySelector('.popup__caption');
@@ -14,13 +14,12 @@ const profileEditBtn = document.querySelector('.profile__edit-button');
 const popupEdit = document.querySelector('.popup_type_edit');
 const popupNewCard = document.querySelector('.popup_type_new-card');
 const popupImageCard = document.querySelector('.popup_type_image');
+// @ Инпуты изменения данных профиля
+const popupInputName = document.querySelector('.popup__input_type_name');
+const popupInputDesc = document.querySelector('.popup__input_type_description');
 
-// ** ** ** СДЕЛАТЬ РЕФАКТОРИНГ
-// ** ** **
-// ** ** **
-// @@@ Функционал - работа с конкретными popups
-
-//@@@ Функционал - откытие popup
+//@@@ Функционал - откытие и закрытие popups
+// @ Открыть конкретный popup
 profileEditBtn.addEventListener('click', () => {
   clearInputProfile();
   openPopup(popupEdit);
@@ -29,37 +28,17 @@ profileAddBtn.addEventListener('click', () => {
   openPopup(popupNewCard);
 });
 
-// Закрыть popup
+// @ Закрыть конкретный popup
 popupEdit.querySelector('.popup__close').addEventListener('click', () => {
   closePopup(popupEdit);
 });
-popupNewCard.querySelector('.popup__close').addEventListener('click', () => {
+popupNewCard.querySelector('.popup__close').addEventListener('click', (e) => {
   closePopup(popupNewCard);
   inputNewName.value = '';
   inputNewUrl.value = '';
-  // переделать в submit и сбросить через reset
 });
 popupImageCard.querySelector('.popup__close').addEventListener('click', () => {
   closePopup(popupImageCard);
-});
-
-// Закрыть все popups
-const closeAllPopup = () => {
-  closePopup(popupEdit);
-  closePopup(popupNewCard);
-  closePopup(popupImageCard);
-};
-// Закрытие через esc
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    closeAllPopup();
-  }
-});
-// Закрыть через нажатие на overlay
-document.addEventListener('click', (e) => {
-  if (e.target.classList.contains('popup_is-opened')) {
-    closeAllPopup();
-  }
 });
 
 // ** ** ** СДЕЛАТЬ РЕФАКТОРИНГ
@@ -74,10 +53,6 @@ const inputNewUrl = popupNewCard.querySelector('.popup__input_type_url');
 // Данные профиля
 const profileTitle = document.querySelector('.profile__title');
 const profileDesc = document.querySelector('.profile__description');
-
-// Инпуты изменения данных профиля
-const popupInputName = document.querySelector('.popup__input_type_name');
-const popupInputDesc = document.querySelector('.popup__input_type_description');
 
 // Отображение данных из профиля в инпут
 const clearInputProfile = () => {
@@ -105,7 +80,7 @@ const clickImg = (obj) => {
 
 // @@@ Вывод массива карточек на страницу
 initialCards.map((obj) => {
-  const card = createCard(obj, deleteCard, funcLike, clickImg);
+  const card = createCard(obj, deleteCard, putLikeFunc, clickImg);
   placesList.append(card);
 });
 
@@ -120,7 +95,7 @@ const addCard = (e) => {
   };
 
   // 2. Добавить новую карточку
-  const card = createCard(newObj, deleteCard, funcLike, clickImg);
+  const card = createCard(newObj, deleteCard, putLikeFunc, clickImg);
   placesList.prepend(card);
 
   // 3. Очистка и закрытие формы

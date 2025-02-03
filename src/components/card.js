@@ -6,12 +6,12 @@ export const deleteCard = (card) => {
 };
 
 // @ Функция лайка
-export const funcLike = function (el) {
+export const putLikeFunc = function (el) {
   el.classList.toggle('card__like-button_is-active');
 };
 
 // @@@ Функционал - создание карточки
-export const createCard = (obj, funcRemove, funcLike, funcImgClick) => {
+export const createCard = (obj, removeFunc, putLikeFunc, ckickImgFunc) => {
   // 1. Получение данных из DOM
   const card = cardTemplate.content.cloneNode(true);
   const cardTitle = card.querySelector('.card__title');
@@ -26,12 +26,12 @@ export const createCard = (obj, funcRemove, funcLike, funcImgClick) => {
   cardImage.alt = `Изображение: ${obj.name}`;
 
   // 3. Поставить / убрать лайк
-  likeBtn.addEventListener('click', () => funcLike(likeBtn));
+  likeBtn.addEventListener('click', () => putLikeFunc(likeBtn));
 
   // 4. Открытие картинки
-  cardImage.addEventListener('click', () => funcImgClick(obj));
+  cardImage.addEventListener('click', () => ckickImgFunc(obj));
 
   // 5. Обработчик удаления и return
-  removeBtn.addEventListener('click', () => funcRemove(removeItem));
+  removeBtn.addEventListener('click', () => removeFunc(removeItem));
   return card;
 };
