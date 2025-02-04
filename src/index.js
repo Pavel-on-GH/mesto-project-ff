@@ -41,10 +41,6 @@ popupImageCard.querySelector('.popup__close').addEventListener('click', () => {
   closePopup(popupImageCard);
 });
 
-// ** ** ** СДЕЛАТЬ РЕФАКТОРИНГ
-// ** ** **
-// ** ** **
-
 const inputNewName = popupNewCard.querySelector('.popup__input_type_card-name');
 const inputNewUrl = popupNewCard.querySelector('.popup__input_type_url');
 
