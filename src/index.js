@@ -1,7 +1,10 @@
 import { initialCards } from './scripts/cards';
 import { deleteCard, putLikeFunc, createCard } from './components/card';
 import { openPopup, closePopup } from './components/modal';
+a;
 import './pages/index.css';
+import { a } from './components/validation';
+// console.log(a);
 
 // @@@ Глобальные переменные и DOM узлы
 const placesList = document.querySelector('.places__list');
