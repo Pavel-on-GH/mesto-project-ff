@@ -3,7 +3,8 @@ import { deleteCard, putLikeFunc, createCard } from './components/card';
 import { openPopup, closePopup } from './components/modal';
 import { enableValidation } from './components/validation';
 import './pages/index.css';
-import { cardsArray } from './components/api';
+import { cardsArray, profileInfo } from './components/api';
+console.log(profileInfo, profileInfo.name);
 
 // @@@ Глобальные переменные и DOM узлы
 const placesList = document.querySelector('.places__list');
@@ -51,6 +52,12 @@ const inputNewUrl = popupNewCard.querySelector('.popup__input_type_url');
 // Данные профиля
 const profileTitle = document.querySelector('.profile__title');
 const profileDesc = document.querySelector('.profile__description');
+const profileAvatar = document.querySelector('.profile__image');
+
+// Отображение данных профиля с сервера
+profileTitle.textContent = profileInfo.name;
+profileDesc.textContent = profileInfo.about;
+profileAvatar.src = profileInfo.avatar;
 
 // Отображение данных из профиля в инпут
 const clearInputProfile = () => {
