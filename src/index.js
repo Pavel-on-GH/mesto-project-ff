@@ -3,6 +3,7 @@ import { deleteCard, putLikeFunc, createCard } from './components/card';
 import { openPopup, closePopup } from './components/modal';
 import { enableValidation } from './components/validation';
 import './pages/index.css';
+import { cardsArray } from './components/api';
 
 // @@@ Глобальные переменные и DOM узлы
 const placesList = document.querySelector('.places__list');
@@ -76,7 +77,7 @@ const clickImg = (obj) => {
 };
 
 // @@@ Вывод массива карточек на страницу
-initialCards.map((obj) => {
+cardsArray.map((obj) => {
   const card = createCard(obj, deleteCard, putLikeFunc, clickImg);
   placesList.append(card);
 });
