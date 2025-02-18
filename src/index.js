@@ -3,8 +3,7 @@ import { deleteCard, putLikeFunc, createCard } from './components/card';
 import { openPopup, closePopup } from './components/modal';
 import { enableValidation } from './components/validation';
 import './pages/index.css';
-import { cardsArray, profileInfo } from './components/api';
-console.log(profileInfo, profileInfo.name);
+import { cardsArray, profileInfo, patchProfileInfo } from './components/api';
 
 // @@@ Глобальные переменные и DOM узлы
 const placesList = document.querySelector('.places__list');
@@ -71,6 +70,7 @@ popupEdit.addEventListener('submit', (e) => {
   // Редактировать данные профиля
   profileTitle.textContent = popupInputName.value;
   profileDesc.textContent = popupInputDesc.value;
+  patchProfileInfo(popupInputName.value, popupInputDesc.value);
   // Закрыть popup
   closePopup(popupEdit);
 });
