@@ -1,9 +1,8 @@
-import { initialCards } from './scripts/cards';
 import { deleteCard, putLikeFunc, createCard } from './components/card';
 import { openPopup, closePopup } from './components/modal';
 import { enableValidation } from './components/validation';
 import './pages/index.css';
-import { cardsArray, profileInfo, patchProfileInfo } from './components/api';
+import { cardsArray, profileInfo, patchProfileInfo, addNewCard } from './components/api';
 
 // @@@ Глобальные переменные и DOM узлы
 const placesList = document.querySelector('.places__list');
@@ -101,6 +100,7 @@ const addCard = (e) => {
 
   // 2. Добавить новую карточку
   const card = createCard(newObj, deleteCard, putLikeFunc, clickImg);
+  addNewCard(newObj.name, newObj.link);
   placesList.prepend(card);
 
   // 3. Очистка и закрытие формы
@@ -114,3 +114,5 @@ popupNewCard.addEventListener('submit', addCard);
 
 // @@@ Вызов функции валидации
 enableValidation();
+
+console.log(cardsArray);

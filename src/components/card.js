@@ -1,7 +1,10 @@
+import { deleteRequest } from './api';
+
 const cardTemplate = document.querySelector('#card-template');
 
 // @ Функция удаления карточки
-export const deleteCard = (card) => {
+export const deleteCard = (card, id) => {
+  deleteRequest(id);
   return card.remove();
 };
 
@@ -32,6 +35,6 @@ export const createCard = (obj, removeFunc, putLikeFunc, ckickImgFunc) => {
   cardImage.addEventListener('click', () => ckickImgFunc(obj));
 
   // 5. Обработчик удаления и return
-  removeBtn.addEventListener('click', () => removeFunc(removeItem));
+  removeBtn.addEventListener('click', () => removeFunc(removeItem, obj._id));
   return card;
 };
