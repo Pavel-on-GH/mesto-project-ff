@@ -1,4 +1,4 @@
-import { deleteRequest } from './api';
+import { deleteRequest, addLike, deleteLike } from './api';
 
 const cardTemplate = document.querySelector('#card-template');
 
@@ -29,12 +29,38 @@ export const createCard = (obj, removeFunc, putLikeFunc, ckickImgFunc) => {
   cardImage.alt = `Изображение: ${obj.name}`;
 
   // 3. Поставить / убрать лайк
-  likeBtn.addEventListener('click', () => putLikeFunc(likeBtn));
+  const countLikes = card.querySelector('.count-likes');
+
+  // Счётчик лайков
+  obj.likes ? (countLikes.textContent = obj.likes.length) : (countLikes.textContent = 0);
+
+  // Отображение активного лайка
+  if (obj.likes.some((e) => e._id === '1bc1bf3083883fb81f64b793')) {
+    likeBtn.classList.add('card__like-button_is-active');
+  }
+
+  likeBtn.addEventListener('click', () => {
+    putLikeFunc(likeBtn);
+
+    if (likeBtn.classList.contains('card__like-button_is-active')) {
+      addLike(obj._id);
+      // countLikes.textContent = obj.likes.length;
+      countLikes.textContent = +countLikes.textContent + 1;
+    } else {
+      deleteLike(obj._id);
+      // countLikes.textContent = obj.likes.length;
+      countLikes.textContent = +countLikes.textContent - 1;
+    }
+  });
 
   // 4. Открытие картинки
   cardImage.addEventListener('click', () => ckickImgFunc(obj));
 
-  // 5. Обработчик удаления и return
+  // 5. Обработчик удаления и return - с проверкой, является ли пользователь создателем карточки
+  if (obj.owner && obj.owner._id !== '1bc1bf3083883fb81f64b793') {
+    removeBtn.style.display = 'none';
+  }
+
   removeBtn.addEventListener('click', () => removeFunc(removeItem, obj._id));
   return card;
 };

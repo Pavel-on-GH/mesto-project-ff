@@ -53,7 +53,7 @@
               required
               minlength="2"
               maxlength="40"
-              pattern="^[a-zA-Zа-яА-Я\-\s]+$"
+              pattern="^[a-zA-Zа-яА-ЯёЁ\-\s]+$"
               data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
               id="name-input" />
             <span class="name-input-error popup__input-error"></span>
@@ -66,7 +66,7 @@
               required
               minlength="2"
               maxlength="200"
-              pattern="^[a-zA-Zа-яА-Я\-\s]+$"
+              pattern="^[a-zA-Zа-яА-ЯёЁ\-\s]+$"
               data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
               id="description-input" />
             <span class="description-input-error popup__input-error"></span>
@@ -88,7 +88,7 @@
               required
               minlength="2"
               maxlength="30"
-              pattern="^[a-zA-Zа-яА-Я\-\s]+$"
+              pattern="^[a-zA-Zа-яА-ЯёЁ\-\s]+$"
               data-error-message="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы"
               id="card-name-input" />
             <span class="card-name-input-error popup__input-error"></span>
@@ -122,6 +122,7 @@
         <div class="card__description">
           <h2 class="card__title"></h2>
           <button type="button" class="card__like-button"></button>
+          <p class="count-likes"></p>
         </div>
       </li>
     </template>

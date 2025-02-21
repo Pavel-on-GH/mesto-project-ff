@@ -1,8 +1,9 @@
 .card__like-button {
+  position: relative;
   width: 21px;
   height: 18px;
   background: transparent url('../../../images/like-inactive.svg') no-repeat;
-  
+
   background-size: 21px 18px;
   border: none;
   cursor: pointer;
@@ -17,4 +18,23 @@
 
 .card__like-button:hover {
   opacity: 0.6;
+}
+
+/* .card__like-button::after {
+  position: absolute;
+  top: 20px;
+  left: 6px;
+  content: '1';
+} */
+
+.count-likes {
+  position: absolute;
+  /* font-family: Inter; */
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 15.73px;
+  letter-spacing: 0%;
+  text-align: center;
+  bottom: 0px;
+  right: 28px;
 }

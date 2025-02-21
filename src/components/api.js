@@ -41,6 +41,7 @@ export const patchProfileInfo = (name, about) => {
   });
 };
 
+// @ Создание новой карточки на сервере
 export const addNewCard = (name, link) => {
   return fetch('https://nomoreparties.co/v1/wff-cohort-32/cards', {
     method: 'POST',
@@ -55,8 +56,36 @@ export const addNewCard = (name, link) => {
   });
 };
 
+// @ Удаление данных карточки на сервере
 export const deleteRequest = (id) => {
   return fetch(`https://nomoreparties.co/v1/wff-cohort-32/cards/${id}`, {
+    method: 'DELETE',
+    headers: {
+      authorization: 'b41f9f15-f391-43b0-b794-48aea543bfa0',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id,
+    }),
+  });
+};
+
+// @ Удаление данных карточки на сервере
+export const addLike = (id) => {
+  return fetch(`https://nomoreparties.co/v1/wff-cohort-32/cards/likes/${id}`, {
+    method: 'PUT',
+    headers: {
+      authorization: 'b41f9f15-f391-43b0-b794-48aea543bfa0',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id,
+    }),
+  });
+};
+// @ Удаление данных карточки на сервере
+export const deleteLike = (id) => {
+  return fetch(`https://nomoreparties.co/v1/wff-cohort-32/cards/likes/${id}`, {
     method: 'DELETE',
     headers: {
       authorization: 'b41f9f15-f391-43b0-b794-48aea543bfa0',
