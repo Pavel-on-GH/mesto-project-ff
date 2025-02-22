@@ -27,3 +27,8 @@ const closeClick = (e) => {
     closePopup(e.target);
   }
 };
+
+// @@@ Функционал - функция изменения кнопки в модальном окне
+export const saveFunc = (saveBtn) => {
+  saveBtn.textContent = 'Сохранить';
+};

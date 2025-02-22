@@ -6,9 +6,17 @@ const getProfile = () => {
       authorization: 'b41f9f15-f391-43b0-b794-48aea543bfa0',
     },
   })
-    .then((res) => res.json())
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
     .then((result) => {
       return result;
+    })
+    .catch((err) => {
+      console.log(err);
     });
 };
 
@@ -19,9 +27,17 @@ const getCardArray = () => {
       authorization: 'b41f9f15-f391-43b0-b794-48aea543bfa0',
     },
   })
-    .then((res) => res.json())
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
     .then((result) => {
       return result;
+    })
+    .catch((err) => {
+      console.log(err);
     });
 };
 
@@ -97,6 +113,7 @@ export const deleteLike = (id) => {
   });
 };
 
+// @ Обновление аватара на сервере
 export const patchAvatar = (avatar) => {
   return fetch('https://nomoreparties.co/v1/wff-cohort-32/users/me/avatar', {
     method: 'PATCH',

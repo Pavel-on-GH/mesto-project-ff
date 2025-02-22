@@ -1,5 +1,5 @@
 import { deleteCard, putLikeFunc, createCard } from './components/card';
-import { openPopup, closePopup } from './components/modal';
+import { openPopup, closePopup, saveFunc } from './components/modal';
 import { enableValidation } from './components/validation';
 import './pages/index.css';
 import {
@@ -84,12 +84,19 @@ const clearInputProfile = () => {
 // @@@ Изменение профиля
 popupEdit.addEventListener('submit', (e) => {
   e.preventDefault();
+
+  // UX сохранения
+  const saveBtn = popupEdit.querySelector('.popup__button');
+  saveBtn.textContent = 'Сохранение...';
+
   // Редактировать данные профиля
   profileTitle.textContent = popupInputName.value;
   profileDesc.textContent = popupInputDesc.value;
   patchProfileInfo(popupInputName.value, popupInputDesc.value);
+
   // Закрыть popup
   closePopup(popupEdit);
+  setTimeout(() => saveFunc(saveBtn), 1000);
 });
 
 //@ Функция клика
@@ -109,6 +116,9 @@ cardsArray.map((obj) => {
 // @@@ Функционал - добавление новой карточки
 const addCard = (e) => {
   e.preventDefault();
+  // UX сохранения
+  const saveBtn = popupNewCard.querySelector('.popup__button');
+  saveBtn.textContent = 'Сохранение...';
 
   // 1. Данные новой карточки
   const newObj = {
@@ -125,6 +135,7 @@ const addCard = (e) => {
   e.target.reset();
 
   closePopup(popupNewCard);
+  setTimeout(() => saveFunc(saveBtn), 1000);
 };
 
 // @@@ Добавление новой карточки
@@ -137,14 +148,22 @@ enableValidation();
 popupAvatar.addEventListener('submit', (e) => {
   e.preventDefault();
 
+  // UX сохранения
+  const saveBtn = popupAvatar.querySelector('.popup__button');
+  saveBtn.textContent = 'Сохранение...';
+
   // Изменить аватар и обновить данные на сервере
   patchAvatar(inputAvatar.value);
+
+  console.log(popupAvatar, saveBtn, '123');
   profileAvatar.style = `background-image: url(
   ${inputAvatar.value}
   )`;
 
   // Очистить инпут
   inputAvatar.value = '';
+
   // Закрыть popup
   closePopup(popupAvatar);
+  setTimeout(() => saveFunc(saveBtn), 1000);
 });
