@@ -35,7 +35,7 @@ export const createCard = (obj, removeFunc, putLikeFunc, ckickImgFunc) => {
   obj.likes ? (countLikes.textContent = obj.likes.length) : (countLikes.textContent = 0);
 
   // Отображение активного лайка
-  if (obj.likes.some((e) => e._id === '1bc1bf3083883fb81f64b793')) {
+  if (obj.likes && obj.likes.some((e) => e._id === '1bc1bf3083883fb81f64b793')) {
     likeBtn.classList.add('card__like-button_is-active');
   }
 

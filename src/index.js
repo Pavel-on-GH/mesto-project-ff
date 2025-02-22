@@ -2,15 +2,23 @@ import { deleteCard, putLikeFunc, createCard } from './components/card';
 import { openPopup, closePopup } from './components/modal';
 import { enableValidation } from './components/validation';
 import './pages/index.css';
-import { cardsArray, profileInfo, patchProfileInfo, addNewCard } from './components/api';
+import {
+  cardsArray,
+  profileInfo,
+  patchProfileInfo,
+  addNewCard,
+  patchAvatar,
+} from './components/api';
 
 // @@@ Глобальные переменные и DOM узлы
 const placesList = document.querySelector('.places__list');
 const popupImg = document.querySelector('.popup__image');
 const popupCaption = document.querySelector('.popup__caption');
+const popupAvatar = document.querySelector('.popup_avatar');
 // @Кнопки
 const profileAddBtn = document.querySelector('.profile__add-button');
 const profileEditBtn = document.querySelector('.profile__edit-button');
+const profileAvatar = document.querySelector('.profile__image');
 // @Popups
 const popupEdit = document.querySelector('.popup_type_edit');
 const popupNewCard = document.querySelector('.popup_type_new-card');
@@ -18,6 +26,11 @@ const popupImageCard = document.querySelector('.popup_type_image');
 // @ Инпуты изменения данных профиля
 const popupInputName = document.querySelector('.popup__input_type_name');
 const popupInputDesc = document.querySelector('.popup__input_type_description');
+// @ Инпуты новой карточки
+const inputNewName = popupNewCard.querySelector('.popup__input_type_card-name');
+const inputNewUrl = popupNewCard.querySelector('.popup__input_type_url');
+// @ Инпут аватара
+const inputAvatar = popupAvatar.querySelector('.popup__input_avatar_url');
 
 //@@@ Функционал - откытие и закрытие popups
 // @ Открыть конкретный popup
@@ -27,6 +40,9 @@ profileEditBtn.addEventListener('click', () => {
 });
 profileAddBtn.addEventListener('click', () => {
   openPopup(popupNewCard);
+});
+profileAvatar.addEventListener('click', () => {
+  openPopup(popupAvatar);
 });
 
 // @ Закрыть конкретный popup
@@ -41,21 +57,23 @@ popupNewCard.querySelector('.popup__close').addEventListener('click', (e) => {
 popupImageCard.querySelector('.popup__close').addEventListener('click', () => {
   closePopup(popupImageCard);
 });
-
-const inputNewName = popupNewCard.querySelector('.popup__input_type_card-name');
-const inputNewUrl = popupNewCard.querySelector('.popup__input_type_url');
+popupAvatar.querySelector('.popup__close').addEventListener('click', () => {
+  closePopup(popupAvatar);
+});
 
 // @@@ Редактирование профиля
 
 // Данные профиля
 const profileTitle = document.querySelector('.profile__title');
 const profileDesc = document.querySelector('.profile__description');
-const profileAvatar = document.querySelector('.profile__image');
 
 // Отображение данных профиля с сервера
 profileTitle.textContent = profileInfo.name;
 profileDesc.textContent = profileInfo.about;
 profileAvatar.src = profileInfo.avatar;
+profileAvatar.style = `background-image: url(
+  ${profileInfo.avatar}
+  )`;
 
 // Отображение данных из профиля в инпут
 const clearInputProfile = () => {
@@ -115,4 +133,18 @@ popupNewCard.addEventListener('submit', addCard);
 // @@@ Вызов функции валидации
 enableValidation();
 
-console.log(cardsArray);
+// @@@ Изменение аватара
+popupAvatar.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  // Изменить аватар и обновить данные на сервере
+  patchAvatar(inputAvatar.value);
+  profileAvatar.style = `background-image: url(
+  ${inputAvatar.value}
+  )`;
+
+  // Очистить инпут
+  inputAvatar.value = '';
+  // Закрыть popup
+  closePopup(popupAvatar);
+});

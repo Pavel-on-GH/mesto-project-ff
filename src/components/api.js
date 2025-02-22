@@ -70,7 +70,7 @@ export const deleteRequest = (id) => {
   });
 };
 
-// @ Удаление данных карточки на сервере
+// @ Добавление лайка на сервере
 export const addLike = (id) => {
   return fetch(`https://nomoreparties.co/v1/wff-cohort-32/cards/likes/${id}`, {
     method: 'PUT',
@@ -83,7 +83,7 @@ export const addLike = (id) => {
     }),
   });
 };
-// @ Удаление данных карточки на сервере
+// @ Удаление лайка на сервере
 export const deleteLike = (id) => {
   return fetch(`https://nomoreparties.co/v1/wff-cohort-32/cards/likes/${id}`, {
     method: 'DELETE',
@@ -97,8 +97,19 @@ export const deleteLike = (id) => {
   });
 };
 
+export const patchAvatar = (avatar) => {
+  return fetch('https://nomoreparties.co/v1/wff-cohort-32/users/me/avatar', {
+    method: 'PATCH',
+    headers: {
+      authorization: 'b41f9f15-f391-43b0-b794-48aea543bfa0',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      avatar,
+    }),
+  });
+};
+
 // @ Экспорты
 export const cardsArray = await getCardArray();
 export const profileInfo = await getProfile();
-
-// deleteCard('67b6502f4620ae1a71f726ad');
