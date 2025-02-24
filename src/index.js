@@ -3,12 +3,16 @@ import { openPopup, closePopup, saveFunc } from './components/modal';
 import { enableValidation } from './components/validation';
 import './pages/index.css';
 import {
-  cardsArray,
-  profileInfo,
+  getCardArray,
+  getProfile,
   patchProfileInfo,
   addNewCard,
   patchAvatar,
 } from './components/api';
+
+// !!! ВРЕМЕННО - асинхронные функции
+const cardsArray = await getCardArray();
+const profileInfo = await getProfile();
 
 // @@@ Глобальные переменные и DOM узлы
 const placesList = document.querySelector('.places__list');

@@ -1,132 +1,117 @@
+const config = {
+  baseUrl: 'https://nomoreparties.co/v1/wff-cohort-32',
+  headers: {
+    authorization: 'b41f9f15-f391-43b0-b794-48aea543bfa0',
+    'Content-Type': 'application/json',
+  },
+};
+console.log(config, config.headers, config.headers.authorization);
+
+const checkResopnse = (res) => {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Ошибка: ${res.status}`);
+};
+
 // @@@ Функционал - получение данных
 // @ Получение данных профиля с сервера
-const getProfile = () => {
-  return fetch('https://nomoreparties.co/v1/wff-cohort-32/users/me', {
-    headers: {
-      authorization: 'b41f9f15-f391-43b0-b794-48aea543bfa0',
-    },
-  })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((result) => {
-      return result;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+export const getProfile = () => {
+  return fetch(`${config.baseUrl}/users/me`, {
+    headers: config.headers,
+  }).then(checkResopnse);
 };
 
 // @ Получение карточек с сервера
-const getCardArray = () => {
-  return fetch('https://nomoreparties.co/v1/wff-cohort-32/cards', {
-    headers: {
-      authorization: 'b41f9f15-f391-43b0-b794-48aea543bfa0',
-    },
-  })
-    .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((result) => {
-      return result;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+export const getCardArray = () => {
+  return fetch(`${config.baseUrl}/cards`, {
+    headers: config.headers,
+  }).then(checkResopnse);
 };
 
 // @@@ Функционал - редактирование
 // @ Редактирование данных профиля на сервере
 export const patchProfileInfo = (name, about) => {
-  return fetch('https://nomoreparties.co/v1/wff-cohort-32/users/me', {
+  return fetch(`${config.baseUrl}/users/me`, {
     method: 'PATCH',
     headers: {
-      authorization: 'b41f9f15-f391-43b0-b794-48aea543bfa0',
-      'Content-Type': 'application/json',
+      authorization: config.headers.authorization,
+      'Content-Type': config.headers['Content-Type'],
     },
     body: JSON.stringify({
       name,
       about,
     }),
-  });
+  }).then(checkResopnse);
 };
 
 // @ Создание новой карточки на сервере
 export const addNewCard = (name, link) => {
-  return fetch('https://nomoreparties.co/v1/wff-cohort-32/cards', {
+  return fetch(`${config.baseUrl}/cards`, {
     method: 'POST',
     headers: {
-      authorization: 'b41f9f15-f391-43b0-b794-48aea543bfa0',
-      'Content-Type': 'application/json',
+      authorization: config.headers.authorization,
+      'Content-Type': config.headers['Content-Type'],
     },
     body: JSON.stringify({
       name,
       link,
     }),
-  });
+  }).then(checkResopnse);
 };
 
 // @ Удаление данных карточки на сервере
 export const deleteRequest = (id) => {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-32/cards/${id}`, {
+  return fetch(`${config.baseUrl}/cards/${id}`, {
     method: 'DELETE',
     headers: {
-      authorization: 'b41f9f15-f391-43b0-b794-48aea543bfa0',
-      'Content-Type': 'application/json',
+      authorization: config.headers.authorization,
+      'Content-Type': config.headers['Content-Type'],
     },
     body: JSON.stringify({
       id,
     }),
-  });
+  }).then(checkResopnse);
 };
 
 // @ Добавление лайка на сервере
 export const addLike = (id) => {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-32/cards/likes/${id}`, {
+  return fetch(`${config.baseUrl}/cards/likes/${id}`, {
     method: 'PUT',
     headers: {
-      authorization: 'b41f9f15-f391-43b0-b794-48aea543bfa0',
-      'Content-Type': 'application/json',
+      authorization: config.headers.authorization,
+      'Content-Type': config.headers['Content-Type'],
     },
     body: JSON.stringify({
       id,
     }),
-  });
+  }).then(checkResopnse);
 };
+
 // @ Удаление лайка на сервере
 export const deleteLike = (id) => {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-32/cards/likes/${id}`, {
+  return fetch(`${config.baseUrl}/cards/likes/${id}`, {
     method: 'DELETE',
     headers: {
-      authorization: 'b41f9f15-f391-43b0-b794-48aea543bfa0',
-      'Content-Type': 'application/json',
+      authorization: config.headers.authorization,
+      'Content-Type': config.headers['Content-Type'],
     },
     body: JSON.stringify({
       id,
     }),
-  });
+  }).then(checkResopnse);
 };
 
 // @ Обновление аватара на сервере
 export const patchAvatar = (avatar) => {
-  return fetch('https://nomoreparties.co/v1/wff-cohort-32/users/me/avatar', {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: 'PATCH',
     headers: {
-      authorization: 'b41f9f15-f391-43b0-b794-48aea543bfa0',
-      'Content-Type': 'application/json',
+      authorization: config.headers.authorization,
+      'Content-Type': config.headers['Content-Type'],
     },
     body: JSON.stringify({
       avatar,
     }),
-  });
+  }).then(checkResopnse);
 };
-
-// @ Экспорты
-export const cardsArray = await getCardArray();
-export const profileInfo = await getProfile();
