@@ -4,7 +4,7 @@ import {
   createCard,
 } from './components/card';
 import { openPopup, closePopup, saveFunc } from './components/modal';
-import { enableValidation } from './components/validation';
+// import { enableValidation } from './components/validation';
 import './pages/index.css';
 import {
   getCardArray,
@@ -13,6 +13,17 @@ import {
   addNewCard,
   patchAvatar,
 } from './components/api';
+import { enableValidation, clearValidation } from './components/validation';
+
+// @ Объъект валидации
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__input-error_active',
+};
 
 // !!! ВРЕМЕННО - асинхронные функции
 const promiseArray = Promise.all([getCardArray(), getProfile()]);
@@ -20,6 +31,8 @@ const promiseArray = Promise.all([getCardArray(), getProfile()]);
 // console.log(promiseArray, await promiseArray);
 const cardsArray = await getCardArray();
 const profileInfo = await getProfile();
+
+// @ Получение id юзера при рендере
 let userId = profileInfo._id;
 
 // @@@ Глобальные переменные и DOM узлы
@@ -43,27 +56,25 @@ const inputNewName = popupNewCard.querySelector('.popup__input_type_card-name');
 const inputNewUrl = popupNewCard.querySelector('.popup__input_type_url');
 // @ Инпут аватара
 const inputAvatar = popupAvatar.querySelector('.popup__input_avatar_url');
-
-// @ Объъект валидации
-const validationConfig = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__error_visible',
-};
+// @ Формы
+const editProfileForm = document.forms['edit-profile'];
+const newCardForm = document.forms['new-place'];
+const avatarForm = document.forms['new-avatar'];
 
 //@@@ Функционал - откытие и закрытие popups
 // @ Открыть конкретный popup
 profileEditBtn.addEventListener('click', () => {
+  clearValidation(editProfileForm, validationConfig);
   clearInputProfile();
   openPopup(popupEdit);
 });
 profileAddBtn.addEventListener('click', () => {
+  clearValidation(newCardForm, validationConfig);
   openPopup(popupNewCard);
 });
 profileAvatar.addEventListener('click', () => {
+  avatarForm.reset();
+  clearValidation(popupAvatar, validationConfig);
   openPopup(popupAvatar);
 });
 
@@ -170,7 +181,7 @@ const addCard = (e) => {
 popupNewCard.addEventListener('submit', addCard);
 
 // @@@ Вызов функции валидации
-enableValidation();
+enableValidation(validationConfig);
 
 // @@@ Изменение аватара
 popupAvatar.addEventListener('submit', (e) => {
