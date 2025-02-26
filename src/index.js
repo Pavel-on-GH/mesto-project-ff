@@ -60,6 +60,7 @@ Promise.all([getProfile(), getCardArray()])
   ${profileInfo.avatar}
   )`;
     let userId = profileInfo._id;
+    console.log(profileInfo._id);
 
     // @@@ Функционал - вывод массива карточек на страницу
     const cardsArray = res[1];
@@ -153,7 +154,8 @@ const addCard = (e) => {
   // 2. Добавить новую карточку
   addNewCard(newObj.name, newObj.link)
     .then((res) => {
-      const card = createCard(res, deleteCard, clickImg, res._id);
+      const card = createCard(res, deleteCard, clickImg, res.owner._id);
+      console.log(res);
       placesList.prepend(card);
       closePopup(popupNewCard);
       // Очистка и закрытие формы
