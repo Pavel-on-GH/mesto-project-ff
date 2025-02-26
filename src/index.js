@@ -1,10 +1,6 @@
-import {
-  deleteCard,
-  // putLikeFunc,
-  createCard,
-} from './components/card';
+import { deleteCard, createCard } from './components/card';
 import { openPopup, closePopup, saveFunc } from './components/modal';
-// import { enableValidation } from './components/validation';
+import { enableValidation, clearValidation } from './components/validation';
 import './pages/index.css';
 import {
   getCardArray,
@@ -13,27 +9,6 @@ import {
   addNewCard,
   patchAvatar,
 } from './components/api';
-import { enableValidation, clearValidation } from './components/validation';
-
-// @ Объъект валидации
-const validationConfig = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button',
-  inactiveButtonClass: 'popup__button_disabled',
-  inputErrorClass: 'popup__input_type_error',
-  errorClass: 'popup__input-error_active',
-};
-
-// !!! ВРЕМЕННО - асинхронные функции
-const promiseArray = Promise.all([getCardArray(), getProfile()]);
-// promiseArray.then((res) => console.log(res));
-// console.log(promiseArray, await promiseArray);
-const cardsArray = await getCardArray();
-const profileInfo = await getProfile();
-
-// @ Получение id юзера при рендере
-let userId = profileInfo._id;
 
 // @@@ Глобальные переменные и DOM узлы
 const placesList = document.querySelector('.places__list');
@@ -60,6 +35,40 @@ const inputAvatar = popupAvatar.querySelector('.popup__input_avatar_url');
 const editProfileForm = document.forms['edit-profile'];
 const newCardForm = document.forms['new-place'];
 const avatarForm = document.forms['new-avatar'];
+// @ Данные профиля
+const profileTitle = document.querySelector('.profile__title');
+const profileDesc = document.querySelector('.profile__description');
+// @ Объъект валидации
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__input-error_active',
+};
+
+// @@@ Promise all
+Promise.all([getProfile(), getCardArray()])
+  .then((res) => {
+    // @@@ Функционал - отображение данных профиля с сервера
+    const profileInfo = res[0];
+    profileTitle.textContent = profileInfo.name;
+    profileDesc.textContent = profileInfo.about;
+    profileAvatar.src = profileInfo.avatar;
+    profileAvatar.style = `background-image: url(
+  ${profileInfo.avatar}
+  )`;
+    let userId = profileInfo._id;
+
+    // @@@ Функционал - вывод массива карточек на страницу
+    const cardsArray = res[1];
+    cardsArray.map((obj) => {
+      const card = createCard(obj, deleteCard, clickImg, userId);
+      placesList.append(card);
+    });
+  })
+  .catch((err) => console.log(err));
 
 //@@@ Функционал - откытие и закрытие popups
 // @ Открыть конкретный popup
@@ -84,8 +93,6 @@ popupEdit.querySelector('.popup__close').addEventListener('click', () => {
 });
 popupNewCard.querySelector('.popup__close').addEventListener('click', (e) => {
   closePopup(popupNewCard);
-  inputNewName.value = '';
-  inputNewUrl.value = '';
 });
 popupImageCard.querySelector('.popup__close').addEventListener('click', () => {
   closePopup(popupImageCard);
@@ -95,19 +102,6 @@ popupAvatar.querySelector('.popup__close').addEventListener('click', () => {
 });
 
 // @@@ Редактирование профиля
-
-// Данные профиля
-const profileTitle = document.querySelector('.profile__title');
-const profileDesc = document.querySelector('.profile__description');
-
-// Отображение данных профиля с сервера
-profileTitle.textContent = profileInfo.name;
-profileDesc.textContent = profileInfo.about;
-profileAvatar.src = profileInfo.avatar;
-profileAvatar.style = `background-image: url(
-  ${profileInfo.avatar}
-  )`;
-
 // Отображение данных из профиля в инпут
 const clearInputProfile = () => {
   popupInputName.value = profileTitle.textContent;
@@ -123,13 +117,16 @@ popupEdit.addEventListener('submit', (e) => {
   saveBtn.textContent = 'Сохранение...';
 
   // Редактировать данные профиля
-  profileTitle.textContent = popupInputName.value;
-  profileDesc.textContent = popupInputDesc.value;
-  patchProfileInfo(popupInputName.value, popupInputDesc.value);
-
-  // Закрыть popup
-  closePopup(popupEdit);
-  setTimeout(() => saveFunc(saveBtn), 1000);
+  patchProfileInfo(popupInputName.value, popupInputDesc.value)
+    .then((res) => {
+      console.log(res);
+      profileTitle.textContent = res.name;
+      profileDesc.textContent = res.about;
+      // Закрыть popup
+      closePopup(popupEdit);
+    })
+    .catch((err) => console.log(err))
+    .finally(() => setTimeout(() => saveFunc(saveBtn), 1000));
 });
 
 //@ Функция клика
@@ -139,18 +136,6 @@ const clickImg = (obj) => {
   popupImg.alt = `Изображение: ${obj.name}`;
   openPopup(popupImageCard);
 };
-
-// @@@ Вывод массива карточек на страницу
-cardsArray.map((obj) => {
-  const card = createCard(
-    obj,
-    deleteCard,
-    // putLikeFunc,
-    clickImg,
-    userId,
-  );
-  placesList.append(card);
-});
 
 // @@@ Функционал - добавление новой карточки
 const addCard = (e) => {
@@ -166,15 +151,16 @@ const addCard = (e) => {
   };
 
   // 2. Добавить новую карточку
-  const card = createCard(newObj, deleteCard, putLikeFunc, clickImg, userId);
-  addNewCard(newObj.name, newObj.link);
-  placesList.prepend(card);
-
-  // 3. Очистка и закрытие формы
-  e.target.reset();
-
-  closePopup(popupNewCard);
-  setTimeout(() => saveFunc(saveBtn), 1000);
+  addNewCard(newObj.name, newObj.link)
+    .then((res) => {
+      const card = createCard(res, deleteCard, clickImg, res._id);
+      placesList.prepend(card);
+      closePopup(popupNewCard);
+      // Очистка и закрытие формы
+      e.target.reset();
+    })
+    .catch((res) => console.log(res))
+    .finally(() => setTimeout(() => saveFunc(saveBtn), 1000));
 };
 
 // @@@ Добавление новой карточки
@@ -197,9 +183,6 @@ popupAvatar.addEventListener('submit', (e) => {
   profileAvatar.style = `background-image: url(
   ${inputAvatar.value}
   )`;
-
-  // Очистить инпут
-  inputAvatar.value = '';
 
   // Закрыть popup
   closePopup(popupAvatar);

@@ -11,19 +11,8 @@ export const deleteCard = (card, id) => {
     .catch((err) => console.log(err));
 };
 
-// @ Функция лайка
-// export const putLikeFunc = function (el) {
-//   el.classList.toggle('card__like-button_is-active');
-// };
-
 // @@@ Функционал - создание карточки
-export const createCard = (
-  obj,
-  removeFunc,
-  // putLikeFunc,
-  ckickImgFunc,
-  userId,
-) => {
+export const createCard = (obj, removeFunc, ckickImgFunc, userId) => {
   // 1. Получение данных из DOM
   const card = cardTemplate.content.cloneNode(true);
   const cardTitle = card.querySelector('.card__title');
