@@ -5,8 +5,9 @@ const config = {
     'Content-Type': 'application/json',
   },
 };
-console.log(config, config.headers, config.headers.authorization);
+// console.log(config, config.headers, config.headers.authorization);
 
+// @ Обработка ответа
 const checkResopnse = (res) => {
   if (res.ok) {
     return res.json();

@@ -4,17 +4,26 @@ const cardTemplate = document.querySelector('#card-template');
 
 // @ Функция удаления карточки
 export const deleteCard = (card, id) => {
-  deleteRequest(id);
-  return card.remove();
+  deleteRequest(id)
+    .then(() => {
+      return card.remove();
+    })
+    .catch((err) => console.log(err));
 };
 
 // @ Функция лайка
-export const putLikeFunc = function (el) {
-  el.classList.toggle('card__like-button_is-active');
-};
+// export const putLikeFunc = function (el) {
+//   el.classList.toggle('card__like-button_is-active');
+// };
 
 // @@@ Функционал - создание карточки
-export const createCard = (obj, removeFunc, putLikeFunc, ckickImgFunc) => {
+export const createCard = (
+  obj,
+  removeFunc,
+  // putLikeFunc,
+  ckickImgFunc,
+  userId,
+) => {
   // 1. Получение данных из DOM
   const card = cardTemplate.content.cloneNode(true);
   const cardTitle = card.querySelector('.card__title');
@@ -22,7 +31,6 @@ export const createCard = (obj, removeFunc, putLikeFunc, ckickImgFunc) => {
   const removeBtn = card.querySelector('.card__delete-button');
   const removeItem = card.querySelector('.places__item');
   const likeBtn = card.querySelector('.card__like-button');
-
   // 2. Наполнение карточки данными
   cardTitle.textContent = obj.name;
   cardImage.src = obj.link;
@@ -35,21 +43,26 @@ export const createCard = (obj, removeFunc, putLikeFunc, ckickImgFunc) => {
   obj.likes ? (countLikes.textContent = obj.likes.length) : (countLikes.textContent = 0);
 
   // Отображение активного лайка
-  if (obj.likes && obj.likes.some((e) => e._id === '1bc1bf3083883fb81f64b793')) {
+  if (obj.likes && obj.likes.some((e) => e._id === userId)) {
     likeBtn.classList.add('card__like-button_is-active');
   }
 
+  // Проверить наличие лайка => поставить / убрать
   likeBtn.addEventListener('click', () => {
-    putLikeFunc(likeBtn);
-
-    if (likeBtn.classList.contains('card__like-button_is-active')) {
-      addLike(obj._id);
-      // countLikes.textContent = obj.likes.length;
-      countLikes.textContent = +countLikes.textContent + 1;
+    if (!likeBtn.classList.contains('card__like-button_is-active')) {
+      addLike(obj._id)
+        .then((res) => {
+          likeBtn.classList.add('card__like-button_is-active');
+          countLikes.textContent = res.likes.length;
+        })
+        .catch((err) => console.log(err));
     } else {
-      deleteLike(obj._id);
-      // countLikes.textContent = obj.likes.length;
-      countLikes.textContent = +countLikes.textContent - 1;
+      deleteLike(obj._id)
+        .then((res) => {
+          likeBtn.classList.remove('card__like-button_is-active');
+          countLikes.textContent = res.likes.length;
+        })
+        .catch((err) => console.log(err));
     }
   });
 
@@ -57,7 +70,7 @@ export const createCard = (obj, removeFunc, putLikeFunc, ckickImgFunc) => {
   cardImage.addEventListener('click', () => ckickImgFunc(obj));
 
   // 5. Обработчик удаления и return - с проверкой, является ли пользователь создателем карточки
-  if (obj.owner && obj.owner._id !== '1bc1bf3083883fb81f64b793') {
+  if (obj.owner && obj.owner._id !== userId) {
     removeBtn.style.display = 'none';
   }
 

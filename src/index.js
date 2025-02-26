@@ -1,4 +1,8 @@
-import { deleteCard, putLikeFunc, createCard } from './components/card';
+import {
+  deleteCard,
+  // putLikeFunc,
+  createCard,
+} from './components/card';
 import { openPopup, closePopup, saveFunc } from './components/modal';
 import { enableValidation } from './components/validation';
 import './pages/index.css';
@@ -11,8 +15,12 @@ import {
 } from './components/api';
 
 // !!! ВРЕМЕННО - асинхронные функции
+const promiseArray = Promise.all([getCardArray(), getProfile()]);
+// promiseArray.then((res) => console.log(res));
+// console.log(promiseArray, await promiseArray);
 const cardsArray = await getCardArray();
 const profileInfo = await getProfile();
+let userId = profileInfo._id;
 
 // @@@ Глобальные переменные и DOM узлы
 const placesList = document.querySelector('.places__list');
@@ -35,6 +43,16 @@ const inputNewName = popupNewCard.querySelector('.popup__input_type_card-name');
 const inputNewUrl = popupNewCard.querySelector('.popup__input_type_url');
 // @ Инпут аватара
 const inputAvatar = popupAvatar.querySelector('.popup__input_avatar_url');
+
+// @ Объъект валидации
+const validationConfig = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_disabled',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_visible',
+};
 
 //@@@ Функционал - откытие и закрытие popups
 // @ Открыть конкретный popup
@@ -113,7 +131,13 @@ const clickImg = (obj) => {
 
 // @@@ Вывод массива карточек на страницу
 cardsArray.map((obj) => {
-  const card = createCard(obj, deleteCard, putLikeFunc, clickImg);
+  const card = createCard(
+    obj,
+    deleteCard,
+    // putLikeFunc,
+    clickImg,
+    userId,
+  );
   placesList.append(card);
 });
 
@@ -131,7 +155,7 @@ const addCard = (e) => {
   };
 
   // 2. Добавить новую карточку
-  const card = createCard(newObj, deleteCard, putLikeFunc, clickImg);
+  const card = createCard(newObj, deleteCard, putLikeFunc, clickImg, userId);
   addNewCard(newObj.name, newObj.link);
   placesList.prepend(card);
 
@@ -159,7 +183,6 @@ popupAvatar.addEventListener('submit', (e) => {
   // Изменить аватар и обновить данные на сервере
   patchAvatar(inputAvatar.value);
 
-  console.log(popupAvatar, saveBtn, '123');
   profileAvatar.style = `background-image: url(
   ${inputAvatar.value}
   )`;
