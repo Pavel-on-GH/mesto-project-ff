@@ -60,7 +60,6 @@ Promise.all([getProfile(), getCardArray()])
   ${profileInfo.avatar}
   )`;
     let userId = profileInfo._id;
-    console.log(profileInfo._id);
 
     // @@@ Функционал - вывод массива карточек на страницу
     const cardsArray = res[1];
@@ -79,6 +78,7 @@ profileEditBtn.addEventListener('click', () => {
   openPopup(popupEdit);
 });
 profileAddBtn.addEventListener('click', () => {
+  newCardForm.reset();
   clearValidation(newCardForm, validationConfig);
   openPopup(popupNewCard);
 });
@@ -180,13 +180,16 @@ popupAvatar.addEventListener('submit', (e) => {
   saveBtn.textContent = 'Сохранение...';
 
   // Изменить аватар и обновить данные на сервере
-  patchAvatar(inputAvatar.value);
-
-  profileAvatar.style = `background-image: url(
-  ${inputAvatar.value}
-  )`;
-
-  // Закрыть popup
-  closePopup(popupAvatar);
-  setTimeout(() => saveFunc(saveBtn), 1000);
+  patchAvatar(inputAvatar.value)
+    .then((res) => {
+      profileAvatar.style = `background-image: url(
+        ${res.avatar}
+        )`;
+      // Закрыть popup
+      closePopup(popupAvatar);
+    })
+    .catch((err) => console.log(err))
+    .finally(() => {
+      setTimeout(() => saveFunc(saveBtn), 1000);
+    });
 });
